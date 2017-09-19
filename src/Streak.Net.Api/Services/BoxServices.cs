@@ -11,11 +11,13 @@ namespace Streak.Net.Api.Services
     {
         private readonly RawBoxServices _rawBoxServices;
         private readonly FieldServices _fieldServices;
+        private readonly StageServices _stageServices;
 
         internal BoxServices(string apiKey, string apiBaseUrl, bool includeRawResponse) : base(includeRawResponse)
         {
             _rawBoxServices = new RawBoxServices(apiKey, apiBaseUrl);
             _fieldServices = new FieldServices(apiKey, apiBaseUrl, includeRawResponse);
+            _stageServices = new StageServices(apiKey, apiBaseUrl, includeRawResponse);
         }
 
         /// <summary>
@@ -54,7 +56,13 @@ namespace Streak.Net.Api.Services
                 box.CustomFields = new Dictionary<string, string>();
                 foreach (var field in box.Fields)
                 {
-                    box.CustomFields.Add(_fieldServices.GetField(pipelineKey, field.Key).Name, field.Value);
+                    var name = _fieldServices.GetField(pipelineKey, field.Key).Name;
+                    var value = field.Value;
+
+                    if (name == "Status")
+                        value = _stageServices.GetStage(pipelineKey, field.Value).Name;
+                    
+                    box.CustomFields.Add(name, value);
                 }
             }
             boxList.RawApiResponse = GetRawApiResponseOrNull(boxList.RawApiResponse);
