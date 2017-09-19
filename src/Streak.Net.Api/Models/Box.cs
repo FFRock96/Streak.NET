@@ -44,6 +44,8 @@ namespace Streak.Net.Api.Models
         [JsonProperty(PropertyName = "stageKey")]
         public string StageKey { get; set; }
 
+        public string StageName { get; set; }
+
         [JsonProperty(PropertyName = "followerKeys")]
         public List<string> FollowerKeys { get; set; }
 

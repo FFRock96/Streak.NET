@@ -12,12 +12,14 @@ namespace Streak.Net.Api.Services
         private readonly RawBoxServices _rawBoxServices;
         private readonly FieldServices _fieldServices;
         private readonly StageServices _stageServices;
+        private readonly PipelineServices _pipelineServices;
 
         internal BoxServices(string apiKey, string apiBaseUrl, bool includeRawResponse) : base(includeRawResponse)
         {
             _rawBoxServices = new RawBoxServices(apiKey, apiBaseUrl);
             _fieldServices = new FieldServices(apiKey, apiBaseUrl, includeRawResponse);
             _stageServices = new StageServices(apiKey, apiBaseUrl, includeRawResponse);
+            _pipelineServices = new PipelineServices(apiKey, apiBaseUrl, includeRawResponse);
         }
 
         /// <summary>
@@ -51,6 +53,7 @@ namespace Streak.Net.Api.Services
                 RawApiResponse = _rawBoxServices.ListAllBoxesInPipeline(pipelineKey, sortOptions)
             };
             boxList.Boxes = JsonConvert.DeserializeObject<List<Box>>(boxList.RawApiResponse.Json);
+
             foreach (var box in boxList.Boxes)
             {
                 box.CustomFields = new Dictionary<string, string>();
@@ -58,12 +61,15 @@ namespace Streak.Net.Api.Services
                 {
                     var name = _fieldServices.GetField(pipelineKey, field.Key).Name;
                     var value = field.Value;
-
+                    /*
                     if (name == "Status")
-                        value = _stageServices.GetStage(pipelineKey, field.Value).Name;
+                        value = _stageServices.GetStage(pipelineKey, field.Value).Name;*/
                     
                     box.CustomFields.Add(name, value);
                 }
+
+                if (_pipelineServices.GetPipeline(pipelineKey).Stages.ContainsKey(box.StageKey))
+                    box.StageName = _pipelineServices.GetPipeline(pipelineKey).Stages[box.StageKey].Name;
             }
             boxList.RawApiResponse = GetRawApiResponseOrNull(boxList.RawApiResponse);
             return boxList;
