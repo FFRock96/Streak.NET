@@ -119,6 +119,8 @@ namespace Streak.Net.Api.Models
         [JsonProperty(PropertyName = "fields")]
         public Dictionary<string, string> Fields { get; set; }
 
+        public Dictionary<string, string> CustomFields { get; set; }
+
         [JsonProperty(PropertyName = "boxKey")]
         public string BoxKey { get; set; }
 

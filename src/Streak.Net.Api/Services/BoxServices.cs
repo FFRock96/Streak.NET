@@ -10,10 +10,12 @@ namespace Streak.Net.Api.Services
     public class BoxServices: ServicesBase
     {
         private readonly RawBoxServices _rawBoxServices;
+        private readonly FieldServices _fieldServices;
 
         internal BoxServices(string apiKey, string apiBaseUrl, bool includeRawResponse) : base(includeRawResponse)
         {
             _rawBoxServices = new RawBoxServices(apiKey, apiBaseUrl);
+            _fieldServices = new FieldServices(apiKey, apiBaseUrl, includeRawResponse);
         }
 
         /// <summary>
@@ -47,6 +49,14 @@ namespace Streak.Net.Api.Services
                 RawApiResponse = _rawBoxServices.ListAllBoxesInPipeline(pipelineKey, sortOptions)
             };
             boxList.Boxes = JsonConvert.DeserializeObject<List<Box>>(boxList.RawApiResponse.Json);
+            foreach (var box in boxList.Boxes)
+            {
+                box.CustomFields = new Dictionary<string, string>();
+                foreach (var field in box.Fields)
+                {
+                    box.CustomFields.Add(_fieldServices.GetField(pipelineKey, field.Key).Name, field.Value);
+                }
+            }
             boxList.RawApiResponse = GetRawApiResponseOrNull(boxList.RawApiResponse);
             return boxList;
         }
