@@ -52,25 +52,17 @@ namespace Streak.Net.Api.Services
             {
                 RawApiResponse = _rawBoxServices.ListAllBoxesInPipeline(pipelineKey, sortOptions)
             };
-            boxList.Boxes = JsonConvert.DeserializeObject<List<Box>>(boxList.RawApiResponse.Json);
-
-            foreach (var box in boxList.Boxes)
+            try
             {
-                box.CustomFields = new Dictionary<string, string>();
-                foreach (var field in box.Fields)
-                {
-                    var name = _fieldServices.GetField(pipelineKey, field.Key).Name;
-                    var value = field.Value;
-                    /*
-                    if (name == "Status")
-                        value = _stageServices.GetStage(pipelineKey, field.Value).Name;*/
-                    
-                    box.CustomFields.Add(name, value);
-                }
-
-                if (_pipelineServices.GetPipeline(pipelineKey).Stages.ContainsKey(box.StageKey))
-                    box.StageName = _pipelineServices.GetPipeline(pipelineKey).Stages[box.StageKey].Name;
+                boxList.Boxes = JsonConvert.DeserializeObject<List<Box>>(boxList.RawApiResponse.Json);
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine(boxList.RawApiResponse.Json);
+                Console.WriteLine("\n\n\n:(\n\n\n");
+                Console.WriteLine(ex.Message);
+            }
+
             boxList.RawApiResponse = GetRawApiResponseOrNull(boxList.RawApiResponse);
             return boxList;
         }
@@ -87,6 +79,21 @@ namespace Streak.Net.Api.Services
             if (string.IsNullOrEmpty(pipelineKey))
                 throw new ArgumentNullException(nameof(pipelineKey), "Please specify a pipeline key!");
             var rawResponse = _rawBoxServices.CreateBox(pipelineKey, name, stageKey);
+            var box = JsonConvert.DeserializeObject<Box>(rawResponse.Json);
+            box.RawApiResponse = GetRawApiResponseOrNull(rawResponse);
+            return box;
+        }
+
+        /// <summary>
+        /// This call gives you a specific box based on the key you provide.
+        /// </summary>
+        /// <param name="boxKey">The key of the box</param>
+        /// <returns></returns>
+        public Box GetBox(string boxKey)
+        {
+            if (string.IsNullOrEmpty(boxKey))
+                throw new ArgumentNullException(nameof(boxKey), "Please specify a box key!");
+            var rawResponse = _rawBoxServices.GetBox(boxKey);
             var box = JsonConvert.DeserializeObject<Box>(rawResponse.Json);
             box.RawApiResponse = GetRawApiResponseOrNull(rawResponse);
             return box;

@@ -4,6 +4,8 @@ namespace Streak.Net.Api
 {
     public class RawStreakServices
     {
+        private string apiBaseUrlv2 = "https://www.streak.com/api/v2";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StreakServices"/> class.
         /// </summary>
@@ -22,7 +24,8 @@ namespace Streak.Net.Api
             BoxesRaw = new RawBoxServices(apiKey, apiBaseUrl);
             StagesRaw = new RawStageServices(apiKey, apiBaseUrl);
             FieldsRaw = new RawFieldServices(apiKey, apiBaseUrl);
-            TasksRaw = new RawTaskService(apiKey, apiBaseUrl);
+            ContactsRaw = new RawContactServices(apiKey, apiBaseUrlv2);
+            OrganizationsRaw = new RawOrganizationServices(apiKey, apiBaseUrlv2);
             TasksRaw = new RawTaskService(apiKey, apiBaseUrl);
             FilesRaw = new RawFileServices(apiKey, apiBaseUrl);
             ThreadsRaw = new RawThreadServices(apiKey, apiBaseUrl);
@@ -78,6 +81,10 @@ namespace Streak.Net.Api
         /// The field services.
         /// </value>
         public RawFieldServices FieldsRaw { get; }
+
+        public RawContactServices ContactsRaw { get; }
+
+        public RawOrganizationServices OrganizationsRaw { get; }
 
         /// <summary>
         /// Provides access to the task service for interacting with Streak tasks in a raw API fashion where the raw JSON response and HTTP status code is returned

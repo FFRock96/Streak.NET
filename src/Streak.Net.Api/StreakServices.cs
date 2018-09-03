@@ -4,6 +4,8 @@ namespace Streak.Net.Api
 {
     public class StreakServices
     {
+        private string apiBaseUrlv2 = "https://www.streak.com/api/v2";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StreakServices"/> class.
         /// </summary>
@@ -23,7 +25,8 @@ namespace Streak.Net.Api
             Boxes = new BoxServices(apiKey, apiBaseUrl, includeRawResponse);
             Stages = new StageServices(apiKey, apiBaseUrl, includeRawResponse);
             Fields = new FieldServices(apiKey, apiBaseUrl, includeRawResponse);
-            Tasks = new TaskServices(apiKey, apiBaseUrl, includeRawResponse);
+            Contacts = new ContactServices(apiKey, apiBaseUrlv2, includeRawResponse);
+            Organizations = new OrganizationServices(apiKey, apiBaseUrlv2, includeRawResponse);
             Tasks = new TaskServices(apiKey, apiBaseUrl, includeRawResponse);
             Files = new FileServices(apiKey, apiBaseUrl, includeRawResponse);
             Threads = new ThreadServices(apiKey, apiBaseUrl, includeRawResponse);
@@ -79,6 +82,10 @@ namespace Streak.Net.Api
         /// The field services.
         /// </value>
         public FieldServices Fields { get; }
+
+        public ContactServices Contacts { get; }
+
+        public OrganizationServices Organizations { get; }
 
         /// <summary>
         /// Provides access to the task service for interacting with Streak tasks in a .NET object.

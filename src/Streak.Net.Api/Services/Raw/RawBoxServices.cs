@@ -65,6 +65,20 @@ namespace Streak.Net.Api.Services.Raw
         }
 
         /// <summary>
+        /// This call gives you a specific box based on the key you provide.
+        /// </summary>
+        /// <param name="boxKey">The key of the box</param>
+        /// <returns></returns>
+        public RawApiResponse GetBox(string boxKey)
+        {
+            if (string.IsNullOrEmpty(boxKey))
+                throw new ArgumentNullException(nameof(boxKey), "Please specify a box key!");
+            int httpStatusCode;
+            var json = Http.Get(ApiHandles.GetBox.Replace("{boxKey}", boxKey), out httpStatusCode);
+            return RawStreakApiResponseFactory.BuildRawStreakApiResponse(json, httpStatusCode);
+        }
+
+        /// <summary>
         ///This call lets you delete a particular box. It also deletes all of the relevant data such as files, emails, and tasks for that box.
         /// </summary>
         /// <param name="boxKey">The key of the box</param>

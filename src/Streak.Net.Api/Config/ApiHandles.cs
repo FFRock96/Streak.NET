@@ -26,6 +26,7 @@
         public string CreateBox = "/pipelines/{pipelineKey}/boxes";
         public string DeleteBox = "/boxes/{boxKey}";
         public string EditBox = "/boxes/{boxKey}";
+        public string GetBox = "/boxes/{boxKey}";
 
         #endregion
 
@@ -49,6 +50,18 @@
         public string ListFieldValues = "/boxes/{boxKey}/fields";
         public string GetFieldValue = "/boxes/{boxKey}/fields/{fieldKey}";
         public string EditFieldValue = "/boxes/{boxKey}/fields/{fieldKey}";
+
+        #endregion
+
+        #region Contacts
+
+        public string GetContact = "/contacts/{contactKey}";
+
+        #endregion
+
+        #region Organizations
+
+        public string GetOrganization = "/organizations/{organizationKey}";
 
         #endregion
 

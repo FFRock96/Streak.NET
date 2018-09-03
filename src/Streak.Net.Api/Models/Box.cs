@@ -119,8 +119,8 @@ namespace Streak.Net.Api.Models
         public int FileCount { get; set; }
 
         [JsonProperty(PropertyName = "fields")]
-        public Dictionary<string, string> Fields { get; set; }
-
+        public Dictionary<string, dynamic> Fields { get; set; }
+        
         public Dictionary<string, string> CustomFields { get; set; }
 
         [JsonProperty(PropertyName = "boxKey")]
@@ -137,5 +137,11 @@ namespace Streak.Net.Api.Models
 
         [JsonProperty(PropertyName = "notes")]
         public string Notes { get; set; }
+
+        [JsonProperty(PropertyName = "contacts")]
+        public List<ContactMin> Contacts { get; set; }
+
+        [JsonProperty(PropertyName = "organizations")]
+        public List<OrganizationMin> Organizations { get; set; }
     }
 }

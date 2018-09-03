@@ -182,5 +182,29 @@ namespace Streak.Net.Api.Services
             field.RawApiResponse = GetRawApiResponseOrNull(rawResponse);
             return field;
         }
+
+        /// <summary>
+        /// This call lets you edit the value of a field for a particular box.
+        /// </summary>
+        /// <param name="boxKey">The key of the box</param>
+        /// <param name="fieldKey">	The name of the field</param>
+        /// <param name="value">The new value for the field.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// Please specify a box key!
+        /// or
+        /// Please specify a field key!
+        /// </exception>
+        public FieldValue EditFieldValueForBox(string boxKey, string fieldKey, Person value)
+        {
+            if (string.IsNullOrEmpty(boxKey))
+                throw new ArgumentNullException(nameof(boxKey), "Please specify a box key!");
+            if (string.IsNullOrEmpty(fieldKey))
+                throw new ArgumentNullException(nameof(boxKey), "Please specify a field key!");
+            var rawResponse = _rawFieldServices.EditFieldValueForBox(boxKey, fieldKey, value);
+            var field = JsonConvert.DeserializeObject<FieldValue>(rawResponse.Json);
+            field.RawApiResponse = GetRawApiResponseOrNull(rawResponse);
+            return field;
+        }
     }
 }

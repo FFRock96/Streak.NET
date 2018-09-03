@@ -3,6 +3,7 @@ using System.Web;
 using Newtonsoft.Json;
 using Streak.Net.Api.Enums;
 using Streak.Net.Api.Models;
+using System.Collections.Generic;
 
 namespace Streak.Net.Api.Services.Raw
 {
@@ -165,6 +166,36 @@ namespace Streak.Net.Api.Services.Raw
         /// </exception>
         public RawApiResponse EditFieldValueForBox(string boxKey, string fieldKey, string value)
         {
+            if (string.IsNullOrEmpty(boxKey))
+                throw new ArgumentNullException(nameof(boxKey), "Please specify a box key!");
+            if (string.IsNullOrEmpty(fieldKey))
+                throw new ArgumentNullException(nameof(boxKey), "Please specify a field key!");
+            var requestJson = JsonConvert.SerializeObject(new
+            {
+                value
+            }, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            int httpStatusCode;
+            var json = Http.Post(ApiHandles.EditFieldValue.Replace("{boxKey}", boxKey).Replace("{fieldKey}", fieldKey), requestJson, out httpStatusCode);
+            return RawStreakApiResponseFactory.BuildRawStreakApiResponse(json, httpStatusCode);
+        }
+
+        /// <summary>
+        /// This call lets you edit the value of a field for a particular box.
+        /// </summary>
+        /// <param name="boxKey">The key of the box</param>
+        /// <param name="fieldKey">	The name of the field</param>
+        /// <param name="value">The new value for the field.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// Please specify a box key!
+        /// or
+        /// Please specify a field key!
+        /// </exception>
+        public RawApiResponse EditFieldValueForBox(string boxKey, string fieldKey, Person person)
+        {
+            List<Person> value = new List<Person>();
+            value.Add(person);
+
             if (string.IsNullOrEmpty(boxKey))
                 throw new ArgumentNullException(nameof(boxKey), "Please specify a box key!");
             if (string.IsNullOrEmpty(fieldKey))
