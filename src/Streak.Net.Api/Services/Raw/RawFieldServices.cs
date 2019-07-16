@@ -164,7 +164,7 @@ namespace Streak.Net.Api.Services.Raw
         /// or
         /// Please specify a field key!
         /// </exception>
-        public RawApiResponse EditFieldValueForBox(string boxKey, string fieldKey, string value)
+        public RawApiResponse EditFieldValueForBox(string boxKey, string fieldKey, dynamic value)
         {
             if (string.IsNullOrEmpty(boxKey))
                 throw new ArgumentNullException(nameof(boxKey), "Please specify a box key!");

@@ -171,7 +171,7 @@ namespace Streak.Net.Api.Services
         /// or
         /// Please specify a field key!
         /// </exception>
-        public FieldValue EditFieldValueForBox(string boxKey, string fieldKey, string value)
+        public FieldValue EditFieldValueForBox(string boxKey, string fieldKey, dynamic value)
         {
             if (string.IsNullOrEmpty(boxKey))
                 throw new ArgumentNullException(nameof(boxKey), "Please specify a box key!");
